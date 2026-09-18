@@ -1,0 +1,28 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      # See backend/.env.example for the full list of supported providers
+      # (OpenAI, DeepSeek, Groq, OpenRouter, Together, Moonshot, Ollama, custom).
+      # Bare `- VAR` passes the host shell's value through only if set, so
+      # setting just OPENAI_API_KEY (legacy) still works without LLM_API_KEY
+      # shadowing it with an empty string.
+      - LLM_PROVIDER
+      - LLM_API_KEY
+      - LLM_MODEL
+      - LLM_BASE_URL
+      - OPENAI_API_KEY
+      - OPENAI_MODEL
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:5173,http://localhost:3000}
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend

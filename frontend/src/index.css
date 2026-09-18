@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-50: #f0fdf6;
+  --color-brand-100: #dbfceb;
+  --color-brand-200: #b8f6d8;
+  --color-brand-300: #86ecbc;
+  --color-brand-400: #4dd89a;
+  --color-brand-500: #22c07d;
+  --color-brand-600: #159a64;
+  --color-brand-700: #147a53;
+  --color-brand-800: #146144;
+  --color-brand-900: #12503a;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: #f6f7f9;
+  transition: background-color 0.15s ease;
+}
+
+html.dark body {
+  background-color: #0f1115;
+}
+
+.md-preview h2 {
+  margin-top: 1.25em;
+  margin-bottom: 0.4em;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.25em;
+}
+
+.md-preview h2:first-child {
+  margin-top: 0;
+}
+
+.md-preview p {
+  margin: 0.4em 0;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.md-preview strong {
+  color: #111827;
+}
+
+.md-preview ul {
+  margin: 0.3em 0 0.8em;
+  padding-left: 1.25em;
+  list-style: disc;
+}
+
+.md-preview li {
+  margin: 0.2em 0;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #resume-preview-root,
+  #resume-preview-root * {
+    visibility: visible;
+  }
+  #resume-preview-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
