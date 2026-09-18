@@ -43,12 +43,34 @@ class ScoreBreakdown(BaseModel):
     byCategory: dict[str, float]
 
 
+class ResumeExperienceElement(BaseModel):
+    title: str = ""
+    organization: str = ""
+    dates: str = ""
+
+
+class ResumeElements(BaseModel):
+    """Structural elements of the resume as recognized by the LLM gap-check
+    pass — not a full parse, just what the same call already reads to do
+    matching, surfaced back to the user. See gap_service.py."""
+
+    name: str = ""
+    contact: list[str] = []
+    hasSummary: bool = False
+    experience: list[ResumeExperienceElement] = []
+    education: list[str] = []
+    skills: list[str] = []
+    certifications: list[str] = []
+    projects: list[str] = []
+
+
 class AnalyzeResponse(BaseModel):
     matched: list[MatchedSkill]
     missing: list[MissingSkill]
     irrelevant: list[IrrelevantItem]
     score: ScoreBreakdown
     usedLlmGapCheck: bool = False
+    resumeElements: ResumeElements | None = None
 
 
 class DraftBulletRequest(BaseModel):

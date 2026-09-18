@@ -4,6 +4,7 @@ import { useResumeStore } from "../store/useResumeStore";
 import { analyzeResumeAgainstJD } from "../api/client";
 import { useTranslation } from "../i18n/useTranslation";
 import type { TranslationKey } from "../i18n/translations";
+import type { ResumeElements } from "../types";
 
 function SourceBadge({ source }: { source: "rule" | "llm" }) {
   if (source !== "llm") return null;
@@ -36,7 +37,9 @@ export default function AnalyzeStep() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [useLlmGapCheck, setUseLlmGapCheck] = useState(false);
+  // Defaults to on (when an LLM is configured) so the AI gap-check + resume
+  // element recognition runs automatically without the user opting in every time.
+  const [useLlmGapCheck, setUseLlmGapCheck] = useState(true);
 
   const runAnalysis = () => {
     setIsLoading(true);
@@ -78,7 +81,7 @@ export default function AnalyzeStep() {
     );
   }
 
-  const { matched, missing, irrelevant, score, usedLlmGapCheck } = matchResult;
+  const { matched, missing, irrelevant, score, usedLlmGapCheck, resumeElements } = matchResult;
 
   return (
     <div className="space-y-6">
@@ -105,6 +108,8 @@ export default function AnalyzeStep() {
         </div>
       </div>
       {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+
+      {resumeElements && <ResumeElementsCard elements={resumeElements} t={t} />}
 
       <div className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
         <div className="flex items-center justify-between">
@@ -197,6 +202,57 @@ export default function AnalyzeStep() {
           </div>
         ))}
       </Bucket>
+    </div>
+  );
+}
+
+function ResumeElementsCard({
+  elements,
+  t,
+}: {
+  elements: ResumeElements;
+  t: (key: TranslationKey, vars?: Record<string, string | number>) => string;
+}) {
+  const rows: { label: string; value: string }[] = [];
+  if (elements.name) rows.push({ label: t("analyzeElementsName"), value: elements.name });
+  if (elements.contact.length) rows.push({ label: t("analyzeElementsContact"), value: elements.contact.join(" · ") });
+  if (elements.hasSummary) rows.push({ label: t("analyzeElementsHasSummary"), value: "✓" });
+  if (elements.education.length) rows.push({ label: t("analyzeElementsEducation"), value: elements.education.join(" · ") });
+  if (elements.skills.length) rows.push({ label: t("analyzeElementsSkills"), value: elements.skills.join(", ") });
+  if (elements.certifications.length)
+    rows.push({ label: t("analyzeElementsCertifications"), value: elements.certifications.join(" · ") });
+  if (elements.projects.length) rows.push({ label: t("analyzeElementsProjects"), value: elements.projects.join(" · ") });
+
+  if (rows.length === 0 && elements.experience.length === 0) return null;
+
+  return (
+    <div className="rounded-xl border border-violet-100 bg-violet-50/60 p-4 dark:border-violet-900 dark:bg-violet-900/10">
+      <h3 className="mb-3 flex items-center gap-1.5 text-sm font-semibold text-violet-800 dark:text-violet-300">
+        <Sparkles size={14} /> {t("analyzeElementsTitle")}
+      </h3>
+      <dl className="grid gap-3 sm:grid-cols-2">
+        {rows.map((row) => (
+          <div key={row.label}>
+            <dt className="text-[11px] uppercase tracking-wide text-violet-500 dark:text-violet-400">{row.label}</dt>
+            <dd className="text-sm text-violet-900 dark:text-violet-200">{row.value}</dd>
+          </div>
+        ))}
+        {elements.experience.length > 0 && (
+          <div className="sm:col-span-2">
+            <dt className="text-[11px] uppercase tracking-wide text-violet-500 dark:text-violet-400">
+              {t("analyzeElementsExperience", { count: elements.experience.length })}
+            </dt>
+            <dd className="mt-1 space-y-0.5 text-sm text-violet-900 dark:text-violet-200">
+              {elements.experience.map((e, i) => (
+                <div key={i}>
+                  {[e.title, e.organization].filter(Boolean).join(", ")}
+                  {e.dates ? ` — ${e.dates}` : ""}
+                </div>
+              ))}
+            </dd>
+          </div>
+        )}
+      </dl>
     </div>
   );
 }

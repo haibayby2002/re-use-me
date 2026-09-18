@@ -42,12 +42,30 @@ export interface ScoreBreakdown {
   byCategory: Record<string, number>;
 }
 
+export interface ResumeExperienceElement {
+  title: string;
+  organization: string;
+  dates: string;
+}
+
+export interface ResumeElements {
+  name: string;
+  contact: string[];
+  hasSummary: boolean;
+  experience: ResumeExperienceElement[];
+  education: string[];
+  skills: string[];
+  certifications: string[];
+  projects: string[];
+}
+
 export interface AnalyzeResponse {
   matched: MatchedSkill[];
   missing: MissingSkill[];
   irrelevant: IrrelevantItem[];
   score: ScoreBreakdown;
   usedLlmGapCheck: boolean;
+  resumeElements: ResumeElements | null;
 }
 
 export type UserResponse = "yes" | "no" | "skip";

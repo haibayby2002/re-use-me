@@ -78,6 +78,16 @@ export const translations = {
     analyzeInResume: "In your resume:",
     analyzeFromJD: "From the JD:",
 
+    analyzeElementsTitle: "AI-recognized resume elements",
+    analyzeElementsName: "Name",
+    analyzeElementsContact: "Contact",
+    analyzeElementsHasSummary: "Has a summary/objective section",
+    analyzeElementsExperience: "Experience ({{count}})",
+    analyzeElementsEducation: "Education",
+    analyzeElementsSkills: "Skills",
+    analyzeElementsCertifications: "Certifications",
+    analyzeElementsProjects: "Projects",
+
     gapNoneToReview: "No missing skills to review — you're already well matched.",
     gapItemOf: "Item {{index}} of {{total}}",
     gapAllDone: "All done reviewing missing skills.",
@@ -213,6 +223,16 @@ export const translations = {
     analyzeEmptyIrrelevant: "Không có mục nào bị gắn cờ không liên quan.",
     analyzeInResume: "Trong CV của bạn:",
     analyzeFromJD: "Từ JD:",
+
+    analyzeElementsTitle: "Các thành phần CV được AI nhận diện",
+    analyzeElementsName: "Họ tên",
+    analyzeElementsContact: "Thông tin liên hệ",
+    analyzeElementsHasSummary: "Có phần tóm tắt/mục tiêu nghề nghiệp",
+    analyzeElementsExperience: "Kinh nghiệm ({{count}})",
+    analyzeElementsEducation: "Học vấn",
+    analyzeElementsSkills: "Kỹ năng",
+    analyzeElementsCertifications: "Chứng chỉ",
+    analyzeElementsProjects: "Dự án",
 
     gapNoneToReview: "Không có kỹ năng nào còn thiếu để xem xét — bạn đã khớp rất tốt rồi.",
     gapItemOf: "Mục {{index}} / {{total}}",

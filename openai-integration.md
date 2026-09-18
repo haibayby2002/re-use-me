@@ -23,13 +23,13 @@ frontend can show whether the app is in "rule-based-only" or "LLM-assisted" mode
 - **Fallback**: deterministic template (`"Applied {term} to {detail}."`) when no
   key is set, or on any API/network error.
 
-## 2. Proposed: ChatGPT-assisted gap detection (not implemented, spec'd for `gap_service.py`)
+## 2. ChatGPT-assisted gap detection + resume element recognition (implemented)
 
-- **Where it would live**: a new function `detect_gap_llm()` in a new
-  `backend/app/services/gap_service.py` (kept separate from the deterministic
-  `skill_matcher.py` so the rule-based path stays untouched and testable alone),
-  invoked from `backend/app/routers/analyze.py` only when `settings.llm_enabled`
-  **and** the request opts in (see consent note below).
+- **Where**: `detect_gap_llm()` in `backend/app/services/gap_service.py` (kept
+  separate from the deterministic `skill_matcher.py` so the rule-based path
+  stays untouched and testable alone), invoked from
+  `backend/app/routers/analyze.py` only when `settings.llm_enabled` **and**
+  the request opts in (`useLlmGapCheck`, see consent note below).
 - **Trigger**: after the existing rule-based `analyze()` call already ran — this
   is a second pass over the *same* resume/JD text, not a replacement.
 - **Motivation**: rule-based taxonomy + fuzzy matching misses synonyms and implied
@@ -38,31 +38,46 @@ frontend can show whether the app is in "rule-based-only" or "LLM-assisted" mode
   a v0.2 idea in `instructions.md` §7.2. This is the "detect gap" half of the
   two ChatGPT-assisted flows requested for this project (the other is #4 below).
 - **Request/response shape**:
-  - `AnalyzeRequest` gains an optional `useLlmGapCheck: bool = False` — explicit
-    opt-in per request, never implied by `llmEnabled` alone.
+  - `AnalyzeRequest.useLlmGapCheck: bool` — explicit opt-in per request, never
+    implied by `llmEnabled` alone. The "Also check with AI" checkbox in
+    `AnalyzeStep.tsx` defaults to checked (when `llmEnabled`), so it runs
+    automatically unless the user turns it off, rather than requiring an
+    extra click every analysis.
   - `MatchedSkill`, `MissingSkill`, and `IrrelevantItem` each gain a
     `source: Literal["rule", "llm"] = "rule"` field. LLM-sourced items are
     appended after the rule-based pass and de-duplicated (case-insensitive term
     match) against what's already there, so the UI can render them in a visually
     distinct "AI-suggested" group per the "always show your work" principle.
+  - `AnalyzeResponse.resumeElements: ResumeElements | None` — the same call
+    also recognizes the resume's own structure (name, contact lines, whether
+    it has a summary, experience entries' title/organization/dates, education,
+    skills, certifications, projects), since the model already reads the full
+    resume text to do the gap check. Surfaced read-only in an "AI-recognized
+    resume elements" card in `AnalyzeStep.tsx` — it does not feed back into
+    `ResumeSections` or change parsing (see #3's still-open scope below).
 - **Input**: normalized resume text + JD text (same strings `skill_matcher.analyze()`
   already receives — no extra extraction step needed).
 - **Prompt**: a system prompt in the same family as `draft_bullet()`'s — explicitly
-  instructed to only report terms/phrases that are *actually present or clearly
-  implied* in the supplied text, never to invent skills, and to return strict JSON
-  (`{"missing": [...], "irrelevant": [...], "matchedImplied": [...]}` with a short
-  `reason` per item quoting the triggering phrase) so responses parse deterministically
-  and degrade safely on a malformed reply.
+  instructed to only report terms/phrases and resume elements *actually present or
+  clearly implied* in the supplied text, never to invent skills or facts, and to
+  return strict JSON (`{"missing": [...], "irrelevant": [...], "matchedImplied": [...],
+  "resumeElements": {...}}`) so responses parse deterministically and degrade safely
+  on a malformed reply.
 - **Fallback**: on missing key, `useLlmGapCheck=False`, any API/network error, or a
   response that fails JSON validation — skip the pass entirely; rule-based results
   stand alone, exactly as today. Never raises past the router.
 - **Cost/privacy note**: this is one of the two places (with #4) full resume + JD
   text leaves the user's machine — stays strictly opt-in, gated behind a visible
-  "Also check with AI" toggle, and clearly disclosed, consistent with
-  `instructions.md`'s local-first privacy stance.
+  "Also check with AI" toggle (defaulted on, but still a real toggle the user can
+  turn off before ever running an analysis), consistent with `instructions.md`'s
+  local-first privacy stance.
 
 ## 3. Proposed: PDF-to-structured-resume assist (not implemented)
 
+- **Note**: not to be confused with #2's `resumeElements` — that's a read-only
+  summary shown alongside the gap-check results. This item is about actually
+  *replacing* `parseResumeSections.ts`'s output pre-analysis so a bad parse
+  doesn't propagate through gap-closing/cleanup/export; still unimplemented.
 - **Where it would live**: an optional post-processing step after
   `backend/app/services/text_extraction.py`, before the frontend's heuristic
   `parseResumeSections.ts` runs — or as an alternative path entirely when enabled.

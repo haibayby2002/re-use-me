@@ -20,7 +20,7 @@ async def analyze_endpoint(
     known_terms_lower = {m.term.lower() for m in result.matched} | {
         m.term.lower() for m in result.missing
     }
-    llm_missing, llm_irrelevant, llm_matched, used_llm = detect_gap_llm(
+    llm_missing, llm_irrelevant, llm_matched, resume_elements, used_llm = detect_gap_llm(
         payload.resumeText, payload.jdText, known_terms_lower, settings
     )
 
@@ -30,4 +30,5 @@ async def analyze_endpoint(
         irrelevant=[*result.irrelevant, *llm_irrelevant],
         score=result.score,
         usedLlmGapCheck=used_llm,
+        resumeElements=resume_elements,
     )
