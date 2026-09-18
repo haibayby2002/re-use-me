@@ -12,6 +12,10 @@ import {
   Moon,
   Sun,
   Languages,
+  Coffee,
+  Heart,
+  Mail,
+  MessageCircle,
 } from "lucide-react";
 import { useResumeStore } from "./store/useResumeStore";
 import { useUIStore } from "./store/useUIStore";
@@ -21,6 +25,9 @@ import haicogihayLogo from "./assets/haicogihay-logo.png";
 import haicogihayBanner from "./assets/haicogihay-banner.png";
 
 const HAICOGIHAY_URL = "https://haicogihay.com";
+const BUY_ME_A_COFFEE_URL = "https://buymeacoffee.com/nguyenquyhai";
+const ZALO_URL = "https://zalo.me/0703017645";
+const CONTACT_EMAIL = "nguyenquyhai2002@gmail.com";
 import SectionNav, { type NavItem } from "./components/SectionNav";
 import SectionShell from "./components/SectionShell";
 import ResumeInput from "./components/ResumeInput";
@@ -215,17 +222,68 @@ function App() {
         </aside>
       </main>
 
-      <footer className="mx-auto max-w-6xl px-4 py-6 text-center sm:px-6">
-        <a
-          href={HAICOGIHAY_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mb-2 inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 dark:text-gray-600 dark:hover:text-gray-400"
-        >
-          <span>{t("footerBuiltBy")}</span>
-          <img src={haicogihayBanner} alt={t("brandBannerAlt")} className="h-5 w-auto" />
-        </a>
-        <p className="text-xs text-gray-400 dark:text-gray-600">{t("footer")}</p>
+      <footer className="mx-auto max-w-6xl px-4 pb-8 pt-2 sm:px-6">
+        <div className="grid gap-6 rounded-2xl border border-gray-200 bg-white p-5 sm:grid-cols-2 sm:p-8 dark:border-gray-800 dark:bg-gray-900">
+          <div>
+            <h3 className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-gray-900 dark:text-gray-100">
+              <Heart size={15} className="text-brand-600" />
+              {t("footerSupportTitle")}
+            </h3>
+            <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">{t("footerSupportBody")}</p>
+            <div className="flex flex-wrap items-center gap-3 text-sm">
+              <a
+                href={BUY_ME_A_COFFEE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 font-medium text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+              >
+                <Coffee size={14} /> {t("footerBuyCoffee")}
+              </a>
+              <span className="text-gray-500 dark:text-gray-400">{t("footerMomoLabel")}</span>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-gray-900 dark:text-gray-100">
+              <MessageCircle size={15} className="text-brand-600" />
+              {t("footerContactTitle")}
+            </h3>
+            <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">{t("footerContactBody")}</p>
+            <ul className="space-y-1.5 text-sm text-gray-500 dark:text-gray-400">
+              <li>
+                <a
+                  href={ZALO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 hover:text-gray-700 dark:hover:text-gray-200"
+                >
+                  <MessageCircle size={14} /> {t("footerZaloLabel")}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="inline-flex items-center gap-1.5 hover:text-gray-700 dark:hover:text-gray-200"
+                >
+                  <Mail size={14} /> {CONTACT_EMAIL}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-6 text-center">
+          <a
+            href={HAICOGIHAY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-2 inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 dark:text-gray-600 dark:hover:text-gray-400"
+          >
+            <span>{t("footerBuiltBy")}</span>
+            <img src={haicogihayBanner} alt={t("brandBannerAlt")} className="h-5 w-auto" />
+          </a>
+          <p className="text-xs text-gray-400 dark:text-gray-600">{t("footer")}</p>
+        </div>
       </footer>
     </div>
   );

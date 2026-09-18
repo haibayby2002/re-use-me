@@ -19,6 +19,14 @@ export const translations = {
     brandLogoAlt: "Hai Có Gì Hay logo — opens haicogihay.com",
     brandBannerAlt: "Hai Có Gì Hay — opens haicogihay.com",
     footerBuiltBy: "Built by",
+    footerSupportTitle: "Support this project",
+    footerSupportBody:
+      "re-use-me is free to use. If it's useful to you, consider supporting the project — it helps cover hosting and API costs.",
+    footerBuyCoffee: "Buy me a coffee",
+    footerMomoLabel: "MoMo: 0703017645",
+    footerContactTitle: "Contact",
+    footerContactBody: "Questions, feedback, or found a bug? Reach out:",
+    footerZaloLabel: "Zalo: (+84) 0703017645",
 
     navResume: "Resume",
     navJD: "Job Description",
@@ -165,6 +173,14 @@ export const translations = {
     brandLogoAlt: "Logo Hai Có Gì Hay — mở haicogihay.com",
     brandBannerAlt: "Hai Có Gì Hay — mở haicogihay.com",
     footerBuiltBy: "Thực hiện bởi",
+    footerSupportTitle: "Ủng hộ dự án",
+    footerSupportBody:
+      "re-use-me miễn phí sử dụng. Nếu công cụ này hữu ích với bạn, hãy cân nhắc ủng hộ dự án — giúp trang trải chi phí hosting và API.",
+    footerBuyCoffee: "Mời tôi cà phê",
+    footerMomoLabel: "MoMo: 0703017645",
+    footerContactTitle: "Liên hệ",
+    footerContactBody: "Có câu hỏi, góp ý, hay phát hiện lỗi? Hãy liên hệ:",
+    footerZaloLabel: "Zalo: (+84) 0703017645",
 
     navResume: "CV",
     navJD: "Mô tả công việc",
