@@ -4,7 +4,7 @@
 // resume and job description are written in.
 export const translations = {
   en: {
-    appTagline: "Reuse your résumé create new one to match with JDs",
+    appTagline: "Reuse your résumé to create new one matching with JDs",
     llmAssistedMode: "LLM-assisted mode",
     ruleBasedMode: "Rule-based-only mode",
     llmModeTitle: "A hosted LLM key is configured on the backend — data sent to it is processed only, never stored",
@@ -23,7 +23,7 @@ export const translations = {
     navResume: "Resume",
     navJD: "Job Description",
     navAnalyze: "Analyze",
-    navGapClosing: "Close Gaps",
+    navGapClosing: "Increase Matching",
     navCleanup: "Cleanup",
     navPreview: "Preview",
     navExport: "Export",
@@ -169,8 +169,8 @@ export const translations = {
     navResume: "CV",
     navJD: "Mô tả công việc",
     navAnalyze: "Phân tích",
-    navGapClosing: "Lấp khoảng trống",
-    navCleanup: "Dọn dẹp",
+    navGapClosing: "Tăng độ phù hợp",
+    navCleanup: "Làm gọn CV",
     navPreview: "Xem trước",
     navExport: "Xuất file",
 
